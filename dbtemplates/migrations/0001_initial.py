@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # Adding model 'Template'
         db.create_table('django_template', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=False, max_length=100)),
             ('content', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('creation_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
             ('last_changed', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
@@ -43,7 +43,7 @@ class Migration(SchemaMigration):
             'creation_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_changed': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'False', 'max_length': '100'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sites.Site']", 'symmetrical': 'False'})
         },
         'sites.site': {
