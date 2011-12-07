@@ -10,13 +10,13 @@ class Migration(SchemaMigration):
         
         # Removing unique constraint on 'Template', fields ['name']
         # db.delete_unique('django_template', ['name'])
-
+        pass
 
     def backwards(self, orm):
         
         # Adding unique constraint on 'Template', fields ['name']
         # db.create_unique('django_template', ['name'])
-
+        pass
 
     models = {
         'dbtemplates.template': {
