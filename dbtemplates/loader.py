@@ -1,4 +1,5 @@
-from django.contrib.sites.models import Site
+#from django.contrib.sites.models import Site
+from lectures.vl.models import Site
 from django.template import TemplateDoesNotExist
 
 from dbtemplates.conf import settings

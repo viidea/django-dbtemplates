@@ -1,6 +1,7 @@
 from django.core.cache import get_cache
 
-from django.contrib.sites.models import Site
+# from django.contrib.sites.models import Site
+from lectures.vl.models import Site
 
 from dbtemplates.conf import settings
 
