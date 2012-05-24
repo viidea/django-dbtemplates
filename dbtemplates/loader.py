@@ -1,8 +1,8 @@
 #from django.contrib.sites.models import Site
 from lectures.vl.models import Site
+from django.db import router
 from django.template import TemplateDoesNotExist
-
-from dbtemplates.conf import settings
+from django.conf import settings
 from dbtemplates.models import Template
 from dbtemplates.utils.cache import (cache, get_cache_key,
                                      set_and_return, get_cache_notfound_key)
@@ -19,6 +19,12 @@ class Loader(BaseLoader):
     and ``sites`` with the current site.
     """
     is_usable = True
+
+    def load_and_store_template(self, template_name, cache_key, site, **params):
+        template = Template.objects.get(name__exact=template_name, **params)
+        db = router.db_for_read(Template, instance=template)
+        display_name = 'dbtemplates:%s:%s:%s' % (db, template_name, site.domain)
+        return set_and_return(cache_key, template.content, display_name)
 
     def load_template_source(self, template_name, template_dirs=None):
         # The logic should work like this:
@@ -62,15 +68,13 @@ class Loader(BaseLoader):
         # Not marked as not-found, move on...
 
         try:
-            template = Template.objects.get(name__exact=template_name,
-                                            sites__in=[site.id])
-            return set_and_return(cache_key, template.content, display_name)
+            return self.load_and_store_template(template_name, cache_key,
+                                                site, sites__in=[site.id])
         except (Template.MultipleObjectsReturned, Template.DoesNotExist):
             try:
-                template = Template.objects.get(name__exact=template_name,
-                        sites__in=[])
-                return set_and_return(cache_key, template.content, display_name)
-            except Template.DoesNotExist:
+                return self.load_and_store_template(template_name, cache_key,
+                                                    site, sites__isnull=True)
+            except (Template.MultipleObjectsReturned, Template.DoesNotExist):
                 pass
 
         # Mark as not-found in cache.

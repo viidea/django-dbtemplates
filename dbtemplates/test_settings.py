@@ -6,13 +6,21 @@ SOUTH_TESTS_MIGRATE = False
 
 SITE_ID = 1
 
+SECRET_KEY = 'something-something'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
+}
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sites',
     'django.contrib.admin',
+    'django.contrib.auth',
     'dbtemplates',
-    'django_jenkins',
 ]
 
 TEMPLATE_LOADERS = (
@@ -21,9 +29,4 @@ TEMPLATE_LOADERS = (
     'dbtemplates.loader.Loader',
 )
 
-JENKINS_TASKS = (
-    'django_jenkins.tasks.run_pyflakes',
-    'django_jenkins.tasks.run_pep8',
-    'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.django_tests',
-)
+TEST_RUNNER = 'discover_runner.DiscoverRunner'
